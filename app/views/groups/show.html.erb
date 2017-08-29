@@ -1,0 +1,36 @@
+<div class="col-7">
+    <a href="/groups">Dashboard</a>
+    <a href="/logout" data-method="delete">Logout</a>
+
+    <% unless @group.users.include? current_user %>
+        <h2><%= @group.name %>  <a href="/groups/<%= @group.id %>/user"><button>Join Group</button></a></h2>
+    <% else %>
+        <h2><%= @group.name %>  <a href="/groups/<%= @group.id %>/user" data-method="delete"><button>Leave Group</button></a></h2>
+    <% end %>
+    <p><%= @group.description %></p>
+
+    <% if @group.user == current_user %>
+        <h3>Created by: YOU!</h3>
+    <% else %>
+        <h3>Created by: <%= @group.user.first_name.titleize %> <%= @group.user.last_name.titleize %></h3>
+    <% end %>
+
+    <table class='table'>
+        <thead>
+            <tr>
+                <th>Members:</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @all_joins.each do |join| %>
+                <% if @group.users.include? join.user %>
+                    <% if join.group == @group && join.user%>
+                        <tr>
+                            <td><%= join.user.first_name.titleize %> <%= join.user.last_name.titleize %></td>
+                        </tr>
+                    <% end %>
+                <% end %>
+            <% end %>
+        </tbody>
+    </table>
+</div>

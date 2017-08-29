@@ -1,0 +1,36 @@
+<div class="col-6">
+    <h1>Hi, <%= current_user.first_name.titleize %> <%= current_user.last_name.titleize %>!</h1>
+    <a href="/logout" data-method="delete">Logout</a>
+
+    <h4>Create a new organization:</h4>
+    <div class="col-3">
+        <form action="/groups" method="post">
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>" />
+
+            <label for="name">Org Name:</label>
+            <input type='text' name="group[name]" class="form-control">
+
+            <label for="price">Description:</label>
+            <div class='form-group'>
+              <textarea name="group[description]" class="form-control"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+    </div>
+
+    <h3>Here are the organizations you may join:</h3>
+        <% @all_groups.each do |group| %>
+                <div>
+                    <% if group.user == current_user %>
+                        <p><a href="groups/<%= group.id %>" data-method="delete">Delete</a> - <a href="groups/<%= group.id %>"><%= group.name.titleize %></a></p>
+                    <% else %>
+                        <p><a href="groups/<%= group.id %>"><%= group.name.titleize %></a></p>
+                    <% end %>
+                    <p>Members: <%= group.joins.count %></p>
+                    <p><%= group.description %></p>
+                    <p>_________________________________________________</p>
+                </div>
+        <% end %>
+
+</div>
